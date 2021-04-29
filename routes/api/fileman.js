@@ -1,4 +1,4 @@
-const Joi = require("joi");  // Pascal for classes
+const Joi = require("joi");  // use Pascal for classes. Joi is for validation.
 const ErrorCodes = require("../../http/ErrorCodes");
 const [helpers, folderNode] = require("./helpers");
 

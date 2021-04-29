@@ -19,6 +19,7 @@ app.use("/api/courses", require("./routes/api/courses.js"));
 
 app.use("/api/files", require("./routes/api/fileman.js"));
 
+app.use("/api/mssql", require("./routes/api/mssql.js"));
 
 // let courses = [
 // { id: 1, name: "Course1"},
