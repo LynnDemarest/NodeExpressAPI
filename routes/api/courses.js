@@ -1,4 +1,4 @@
-const Joi = require("joi");  // Pascal for classes
+const Joi = require("@hapi/joi");  // Pascal for classes
 const ErrorCodes = require("../../http/ErrorCodes");
 const express = require("express");
 const router = express.Router();
