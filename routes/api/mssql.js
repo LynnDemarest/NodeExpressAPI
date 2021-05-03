@@ -1,18 +1,17 @@
 const sql = require("mssql")
-//const { config } = require('./config.js');
 const Joi = require("@hapi/joi");  // use Pascal for classes. Joi is for validation.
-const ErrorCodes = require("../../http/ErrorCodes");
+const { ReasonPhrases, StatusCodes, getReasonPhrase, getStatusCode } = require('http-status-codes');
 const [helpers] = require("./helpers");
-
 const express = require("express");
 const Path = require("path");
-const { DH_NOT_SUITABLE_GENERATOR } = require("constants");
 const router = express.Router();
 
+
+// mssql.js 
+// https://www.npmjs.com/package/mssql
 //
-// see: https://www.npmjs.com/package/mssql
-//
-// This code uses AdventureWorksLT2019. I have added a simple stored procedure to use: 
+// This code uses AdventureWorksLT2019, so you'll have to set that up yourself
+// andI have added a simple stored procedure to use: 
 // 
 // CREATE PROCEDURE upsertCustomer 
 // 	-- Add the parameters for the stored procedure here
@@ -44,9 +43,9 @@ const iMaxCustomers = 100;
 const iMaxMax = 500;
 
 let PORT = parseInt(process.env.mssql_port);
-let options_encrypt = "true";
+let options_encrypt = true;
 let enableArithAbort = true;
-if (process.env.mssql_options_encrypt == "false") options_encrypt = "false";
+if (process.env.mssql_options_encrypt == "false") options_encrypt = false;     
 if (process.env.mssql_enableArithAbort == "false") enableArithAbort = false;
 const config = {
     user: process.env.mssql_user,
@@ -54,7 +53,7 @@ const config = {
     server: process.env.mssql_server,
     port: PORT,
     database: process.env.mssql_database,
-    option: {
+    options: {
         encrypt: options_encrypt,
         enableArithAbort: enableArithAbort
     }
@@ -97,7 +96,7 @@ router.get("/customer", async (req, res) => {
     } catch (err) {
         // ... error checks
         console.log(err);
-        res.status(ErrorCodes.BAD_REQUEST).send(`Could not get customers: ${err}`);
+        res.status(StatusCodes.BAD_REQUEST).send(`Could not get customers: ${err}`);
     }
 });
 
@@ -155,7 +154,7 @@ router.get("/customer/:id", async (req, res) => {
     } catch (err) {
         // ... error checks
         console.log(err);
-        res.status(ErrorCodes.BAD_REQUEST).send(`Could not get customer ${ID}: ${err}`);
+        res.status(StatusCodes.BAD_REQUEST).send(`Could not get customer ${ID}: ${err}`);
     }
 });
 
@@ -204,7 +203,7 @@ router.post("/customer", async (req, res) => {
         });
         const { error } = schema.validate(req.body);
         if (error) {
-            res.status(ErrorCodes.BAD_REQUEST).send(error.details[0].message);
+            res.status(StatusCodes.BAD_REQUEST).send(error.details[0].message);
         }
         else {
 
@@ -229,7 +228,7 @@ router.post("/customer", async (req, res) => {
     }
     catch (err) {
         console.log(err);
-        res.status(ErrorCodes.BAD_REQUEST).send(`Could not save customer : ${err}`);
+        res.status(StatusCodes.BAD_REQUEST).send(`Could not save customer : ${err}`);
     }
 
 });
@@ -302,7 +301,7 @@ router.delete("/customer/:id", async (req, res) => {
     } catch (err) {
         // ... error checks
         console.log(err);
-        res.status(ErrorCodes.BAD_REQUEST).send(`Could not get customer ${ID}: ${err}`);
+        res.status(StatusCodes.BAD_REQUEST).send(`Could not get customer ${ID}: ${err}`);
     }
 });
 
@@ -345,4 +344,12 @@ router.delete("/customer/:id", async (req, res) => {
 // });
 
 // doread();
+
+// async function getCustomers(max) {
+//     await myPoolConnect;
+//     const result = await myPool.request().query(`select top ${max} * from SalesLT.Customer`);
+//     return result; 
+// }
+
+
 module.exports = router;

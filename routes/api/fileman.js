@@ -1,5 +1,5 @@
 const Joi = require("@hapi/joi");  // use Pascal for classes. Joi is for validation.
-const ErrorCodes = require("../../http/ErrorCodes");
+const { ReasonPhrases, StatusCodes, getReasonPhrase, getStatusCode } = require('http-status-codes');
 const [helpers, folderNode] = require("./helpers");
 
 const express = require("express");
@@ -46,7 +46,7 @@ router.get("/", async (req, res) => {
     }
     catch (ex) {
         console.log(ex);
-        res.status(ErrorCodes.BAD_REQUEST).send(`Could not find ${fullpath} -- ${ex}`);
+        res.status(StatusCodes.BAD_REQUEST).send(`Could not find ${fullpath} -- ${ex}`);
         return;
     }
 
@@ -62,7 +62,7 @@ router.get("/", async (req, res) => {
         }
         catch (ex) {
             console.log(ex);
-            res.status(ErrorCodes.NOT_FOUND).send(`Could not read ${fullpath}`);
+            res.status(StatusCodes.NOT_FOUND).send(`Could not read ${fullpath}`);
             return;
         }
 
@@ -85,7 +85,7 @@ router.get("/", async (req, res) => {
             }
             catch (ex) {
                 console.log(ex);
-                res.status(ErrorCodes.NOT_FOUND).send(`Could not get folder data for ${fullpath}`);
+                res.status(StatusCodes.NOT_FOUND).send(`Could not get folder data for ${fullpath}`);
                 return;
             }
 
@@ -282,7 +282,7 @@ router.post("/", (req, res) => {
     });
     const { error } = schema.validate(req.body);
     if (error) {
-        res.status(ErrorCodes.BAD_REQUEST).send(error.details[0].message);
+        res.status(StatusCodes.BAD_REQUEST).send(error.details[0].message);
     }
     else {
         // save the file 

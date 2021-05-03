@@ -1,38 +1,29 @@
 const router = require("express").Router();
-const ErrorCodes = require("../../http/ErrorCodes");
 const User = require("../../models/User");
-const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const Joi = require("@hapi/joi");
 const jwt = require("jsonwebtoken");
 const { registerValidation, loginValidation } = require("./validation");
-// const schema = {
-//     name: Joi.string().min(3).required(),
-//     email: Joi.string().min(6).required().email(),
-//     password: Joi.string().min(6).required()
-// }
+const { ReasonPhrases, StatusCodes, getReasonPhrase, getStatusCode } = require('http-status-codes');
 
-
-
-
+// api/user/register
+// name, email and password should be in the JSON body.
+//
 router.post('/register', async (req, res) => {
 
     const { error } = registerValidation(req.body);
-    if (error) return res.status(ErrorCodes.BAD_REQUEST).send(error.details[0].message);
+    if (error) return res.status(StatusCodes.BAD_REQUEST).send(error.details[0].message);    // SHORT-CIRCUIT !!!
 
     try {
-        //const MongoClient = require('mongodb').MongoClient;
-        const uri = process.env.MongoCS; // "mongodb+srv://lynn:VRYUzni4vfnUBMP3@cluster0.cln9j.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-        //const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-        await mongoose.connect(uri, { useNewUrlParser: true });
-
+        // Note: Connection is established in index.js 
         const emailExists = await User.findOne({ email: req.body.email });
         if (emailExists) {
-            return res.status(ErrorCodes.BAD_REQUEST).send('Email already exists');
+            let code = StatusCodes.BAD_REQUEST;
+            return res.status(code).send(`${getReasonPhrase(code)} Email already exists`);         // SHORT-CIRCUIT !!!
         }
 
         // hash the password 
-        let salt = await bcrypt.genSalt(10);
+        let salt = await bcrypt.genSalt(process.inv.SALT_ROUNDS);
         let pwdHash = await bcrypt.hash(req.body.password, salt);
         const user = new User({
             name: req.body.name,
@@ -40,12 +31,11 @@ router.post('/register', async (req, res) => {
             password: pwdHash
         });
 
-        // Won't get here if email exists. 
-        const savedUser = await user.save();
+        const savedUser = await user.save({ isNew: true } );
         res.send(savedUser);
     }
     catch (err) {
-        res.status(ErrorCodes.BAD_REQUEST).send(err);
+        res.status(StatusCodes.BAD_REQUEST).send(err);
     }
 });
 
@@ -53,24 +43,20 @@ router.post('/register', async (req, res) => {
 //
 router.post('/login', async (req, res) => {
     const { error } = loginValidation(req.body);
-    if (error) return res.status(ErrorCodes.BAD_REQUEST).send(error.details[0].message);
-    try {
-        //const MongoClient = require('mongodb').MongoClient;
-        const uri = process.env.MongoCS; // "mongodb+srv://lynn:VRYUzni4vfnUBMP3@cluster0.cln9j.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-        //const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-        await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    if (error) return res.status(StatusCodes.BAD_REQUEST).send(error.details[0].message);        // SHORT-CIRCUIT !!!
 
+    try {
         const user = await User.findOne({ email: req.body.email });
-        if (!user) return res.status(ErrorCodes.BAD_REQUEST).send('Login failed.');
+        if (!user) return res.status(StatusCodes.BAD_REQUEST).send('Login failed.');             // SHORT-CIRCUIT !!!
 
         const validPass = await bcrypt.compare(req.body.password, user.password);
-        if (!validPass) return res.status(ErrorCodes.BAD_REQUEST).send("Login failed.")
+        if (!validPass) return res.status(StatusCodes.BAD_REQUEST).send("Login failed.")         // SHORT-CIRCUIT !!!
 
-        const token = jwt.sign({_id: user._id}, process.env.tokensecret);
-        res.header('auth-token', token).send(token);
+        const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
+        res.header(process.env.JWT_TOKEN_NAME, token).send(token);
     }
     catch (err) {
-        res.status(ErrorCodes.BAD_REQUEST).send(err);
+        res.status(StatusCodes.BAD_REQUEST).send(err);
     }
 });
 

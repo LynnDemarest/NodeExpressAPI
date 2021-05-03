@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("./partials/head.ejs") %>
+<body>
+    <%- include("./partials/nav.ejs") %>
+    <h1>Adventure Works</h1>
+
+    <% customers.forEach(function(cust){ %>
+        <%- include('./partials/cust.ejs', cust); %>
+    <% }); %>
+
+    <%- include("./partials/footer.ejs") %>
+</body>
+</html>

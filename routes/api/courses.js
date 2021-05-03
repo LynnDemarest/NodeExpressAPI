@@ -1,5 +1,5 @@
 const Joi = require("@hapi/joi");  // Pascal for classes
-const ErrorCodes = require("../../http/ErrorCodes");
+const { ReasonPhrases, StatusCodes, getReasonPhrase, getStatusCode } = require('http-status-codes');
 const express = require("express");
 const router = express.Router();
 
@@ -31,12 +31,12 @@ router.get('/:id', (req, res) => {
             res.send(course);
         }
         else {
-            res.status(ErrorCodes.NOT_FOUND).send(`${ID} was not found`);
+            res.status(StatusCodes.NOT_FOUND).send(`${ID} was not found`);
             res.end();
         }
     }
     else {
-        res.status(ErrorCodes.BAD_REQUEST).send("Bad Request. ID must be a number. Request /Usage.html for more.");
+        res.status(StatusCodes.BAD_REQUEST).send("Bad Request. ID must be a number. Request /Usage.html for more.");
         res.end();
     }
 })
@@ -48,7 +48,7 @@ router.post('/', (req, res) => {
     });
     const { error } = schema.validate(req.body);
     if (error) {
-        res.status(ErrorCodes.BAD_REQUEST).send(error.details[0].message);
+        res.status(StatusCodes.BAD_REQUEST).send(error.details[0].message);
     }
     else {
         const course = {
