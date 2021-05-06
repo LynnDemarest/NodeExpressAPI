@@ -36,19 +36,23 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // HOME PAGE 
-//
+// and other views: /help (usage), and /advworks, which reads from SQL Server.
 //
 app.get("/", (req, res) => res.render("index", { title: "Home"}));
+
 app.get("/help", (req, res) => res.render("usage", { title: "Usage"}));
 
 // async function not called with await...
-//let customers = [{ name: "cust1" }, { name: "cust2"} ];
+// Here, we read customers from the AdventureWorks database and pass them to the advworks .ejs view. 
+//
 sqldata.getCustomers().then( (customers) => {
     app.get("/advworks", (req, res) => res.render("advworks", { title: "Adventure Works", customers: customers.recordset }));    
 })
 //app.get("/advworks", (req, res) => res.render("advworks", { title: "Adventure Works", customers }));
 
 // Inject the courses middleware into the pipeline.
+// Note: Relative paths are given in the .js file's route handlers. 
+//       So /api/user/register is declared as /register in auth.js 
 //
 app.use("/api/user", require("./routes/api/auth.js"));
 
