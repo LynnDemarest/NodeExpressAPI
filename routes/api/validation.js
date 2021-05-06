@@ -42,9 +42,23 @@ const fileDeleteValidation = (data) => {
     return error;
 };
 
+///////////////////////////////////////////////////////////////////////////////////
+// mssql.js validation
+//
+const mssqlCustomerValidation = (data) => {
+    const schema = Joi.object({
+        customerid: Joi.number().integer(), // zero for new record
+        firstname: Joi.string().max(50).required(),
+        lastname: Joi.string().max(50).required(),
+    });
+    const { error } = schema.validate(data);
+    return error;
+};
+
 module.exports = {
     registerValidation,
     loginValidation,
     filePostValidation,
     fileDeleteValidation,
+    mssqlCustomerValidation,
 };
