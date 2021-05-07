@@ -8,7 +8,7 @@ See: https://nodejs.org/docs/latest-v14.x/api
 
 A "Hello World" level endpoint to illustrate a simple _Express_ (^4.17.1) API.
 
-Also uses the _http-status-codes_ (^2.1.4) package for error messages and _@hapi/joi_ (^17.1.1) for schema validation.
+Also uses the _http-status-codes_ (^2.1.4) package for error messages and _@hapi/joi_ (^17.1.1) for data validation.
 
 To reduce the complexity of this test API, the data is stored in an in-memory array.
 
@@ -25,7 +25,7 @@ allows only integers.
 
 2. **/api/files**
 
-Endpoints to exercise the node.js file system (fs) class.
+Endpoints to exercise the node.js file system (fs) package.
 
 As an aside, illustrates the use of async/await, promises, and callbacks versions of fs.
 
@@ -47,7 +47,7 @@ Illustrates the use of a singleton connection pool.
 
 4.  **/api/auth**
 
-JWT authentication using _jwtwebtoken_ package and mongodb no-sql database.
+JWT authentication using _jwtwebtoken_ package and _mongodb_ no-sql database with _mongoose_.
 
 -   POST /api/auth/login
     Data is { "email": "name@domain.com", "password": "myPassword" }
@@ -60,8 +60,24 @@ Features include:
 -   _bcryptjs_ to encode passwords to and from the database.
 -   _dotenv_ to facilitate the loading of secret .env settings into the process.env collection.
 -   _jsonwebtoken_ to encode and decode JWT tokens built with secret key.
--   _mongoose_ to help with mongodb hosted for free at https://www.mongodb.com/cloud/atlas
+-   _mongoose_ to help with _mongodb_, hosted free at https://www.mongodb.com/cloud/atlas
 -   _mssql_ to read MS Sql Server database. CRUD methods.
--   middleware authentication to protect a given endpoint using this syntax: router.get('/', _verify_, async (req, res) => {
+-   middleware authentication to protect a given endpoint, using this syntax: router.get('/', _verify_, async (req, res) => {
+
+5. **/api/posts**
+
+This is a simple controller just used to demonstrate the use of _verifyToken.js_, which uses jsonwebtoken to validate incoming tokens stored in the request header.
+
+The token itself is returned by the _login_ endpoint in auth.js when you pass in a valid email and password.
+
+The signature of the _get_ method in _posts.js_ looks like this:
+
+`router.get('/', verifyJWTToken, async (req, res) => { ...`
+
+_verifyJWTToken_ is included like this:
+
+`const verifyJWTToken = require('./verifyToken'); // only exports a single anonymous function`
+
+-- 30 --
 
 Thank you to Dev Ed for this fine video: https://www.youtube.com/watch?v=2jqok-WgelI&t=1502s

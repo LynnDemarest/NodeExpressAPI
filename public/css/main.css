@@ -1,20 +1,52 @@
+body {
+    font-size: 14px;
+    font-weight: normal;
+    margin: 0;
+}
+
+.container {
+    padding-left: 10px;
+}
+
 .nav {
     list-style: none;
-    background:black;
-    
-    padding:1rem;
+    background: black;
+
+    padding: 1rem;
 }
 .nav a {
     text-decoration: none;
     background-color: gold;
-    color:black;
-    font-weight:bold;
-    margin-right:1rem;
-    padding:.5rem;
+    color: black;
+    font-weight: bold;
+    margin-right: 1rem;
+    padding: 0.5rem;
 }
 
-.nav a:hover{
-    color:gold;
-    background-color:#444;
-    outline:1px solid gold;
+.nav a:hover {
+    color: gold;
+    background-color: #444;
+    outline: 1px solid gold;
+}
+
+.customer-table {
+    width: 700px;
+    font-weight: bold;
+    border: 1px solid gray;
+    border-collapse: collapse;
+}
+.customer-table th {
+    background-color: gray;
+    color: white;
+}
+.customer-table td {
+    color: black;
+    border: 1px solid gray;
+    padding: 3px;
+    margin: 0;
+}
+
+footer {
+    margin-top: 40px;
+    color: gray;
 }

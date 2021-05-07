@@ -36,12 +36,9 @@ const { mssqlCustomerValidation } = require("./validation.js");
 // GO
 //
 //
-const bDEBUG = true;
 const iMaxCustomers = process.env.mssql_defaultLimit;
 const iMaxMax = process.env.mssql_maxLimit;
-
-let PORT = parseInt(process.env.mssql_port);
-
+const PORT = parseInt(process.env.mssql_port);
 let options_encrypt = true;
 let enableArithAbort = true;
 if (process.env.mssql_options_encrypt == "false") options_encrypt = false;
@@ -58,6 +55,9 @@ const sqlConfig = {
         enableArithAbort: enableArithAbort,
     },
 };
+
+// connection pool
+//
 const myPool = new sql.ConnectionPool(sqlConfig);
 const myPoolConnect = myPool.connect();
 
@@ -84,8 +84,8 @@ router.get("/customer", async (req, res) => {
         } else {
             if (max > iMaxMax) max = iMaxMax;
         }
-
-        const result = await myPool.request().query(`select top ${max} * from SalesLT.Customer`);
+        let cols = "Title, FirstName + ' ' + MiddleName + ' ' + LastName as Name, EmailAddress, Phone";
+        const result = await myPool.request().query(`select top ${max} ${cols} from SalesLT.Customer`);
         // Note:
         // recordsets[] has an array of recordsets, in case the query returned more than one.
         // recordset is just the first one.
@@ -107,12 +107,13 @@ router.get("/customer/:id", async (req, res) => {
     try {
         await myPoolConnect;
         let resp;
+        let cols = "Title, FirstName + MiddleName + LastName as Name, EmailAddress, Phone";
         var ID = parseInt(req.params.id);
         if (!isNaN(ID)) {
             const result = await myPool
                 .request()
                 .input("CustomerID", sql.Int, ID)
-                .query("select * from SalesLT.Customer where CustomerID=@CustomerID");
+                .query(`select ${cols} from SalesLT.Customer where CustomerID=@CustomerID`);
 
             console.dir(result);
             //

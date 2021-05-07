@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include("./partials/head.ejs") %>
-<body>
-    <%- include("./partials/nav.ejs") %>
-    <h1>Adventure Works</h1>
-
-    <% customers.forEach(function(cust){ %>
-        <%- include('./partials/cust.ejs', cust); %>
-    <% }); %>
-
-    <%- include("./partials/footer.ejs") %>
-</body>
+    <%- include("./partials/head.ejs") %>
+    <body>
+        <%- include("./partials/nav.ejs") %>
+        <div class="container">
+            <h1><%= title %></h1>
+            <table class="customer-table">
+                <tr>
+                    <th>Title</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                </tr>
+                <% customers.forEach( (cust) => { %> <%- include("./partials/cust.ejs", { cust : cust }) %> <% }); %>
+            </table>
+        </div>
+        <%- include("./partials/footer.ejs") %>
+    </body>
 </html>

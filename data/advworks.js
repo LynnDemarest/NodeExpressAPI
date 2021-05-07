@@ -19,17 +19,18 @@ async function getCustomers() {
         database: process.env.mssql_database,
         options: {
             encrypt: options_encrypt,
-            enableArithAbort: enableArithAbort
-        }
+            enableArithAbort: enableArithAbort,
+        },
     };
 
     const myPool = new sql.ConnectionPool(config);
     const myPoolConnect = myPool.connect();
 
-    myPool.on('error', (err) => console.log(err));
+    myPool.on("error", (err) => console.log(err));
 
     await myPoolConnect;
-    const result = await myPool.request().query(`select top ${max} * from SalesLT.Customer`);
+    let cols = "Title, FirstName + ' ' + MiddleName + ' ' + LastName as Name, EmailAddress, Phone";
+    const result = await myPool.request().query(`select top ${max} ${cols} from SalesLT.Customer`);
     return result;
 }
 
