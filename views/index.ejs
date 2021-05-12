@@ -1,9 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include("./partials/head.ejs") %>
-<body>
+  <%- include("./partials/head.ejs") %>
+  <body>
     <%- include("./partials/nav.ejs") %>
-    <h1>Home</h1>
+    <div class="container">
+      <h1>Home</h1>
+
+      <div data-lorem="3p">
+            <img src="https://picsum.photos/500/300" style="float:right;margin-right:20px;margin-left:20px;" />
+
+      </div>
+    </div>
     <%- include("./partials/footer.ejs") %>
-</body>
+  </body>
 </html>

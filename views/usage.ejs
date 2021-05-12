@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include("./partials/head.ejs") %>
-<body>
+  <%- include("./partials/head.ejs") %>
+  <body>
     <%- include("./partials/nav.ejs") %>
-    <h1>How to Use</h1>
+    <div class="container">
+      <h1>How to Use</h1>
 
-    <p>This is a simple Node.js API using Express and several other modules. 
+      <p>
+        This is a simple Node.js API using Express and several other modules.
+        The endpoints are :
+      </p>
 
-    The endpoints are :
-    <ul>
-        <li>api/courses -- Manipulates an in-memory array, for simple experiments.</li>
+      <ul>
+        <li>
+          api/courses -- Manipulates an in-memory array, for simple experiments.
+        </li>
         <li>api/fileman -- Manipulates a given folder tree.</li>
-    </ul>
+      </ul>
+    </div>
     <%- include("./partials/footer.ejs") %>
-</body>
+  </body>
 </html>

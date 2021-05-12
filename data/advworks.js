@@ -1,7 +1,7 @@
 const sql = require("mssql");
 
-async function getCustomers() {
-    let max = 10;
+async function getCustomers(cols, maxToGet) {
+    let max = maxToGet;
     const bDEBUG = true;
     const iMaxCustomers = 100;
     const iMaxMax = 500;
@@ -29,7 +29,7 @@ async function getCustomers() {
     myPool.on("error", (err) => console.log(err));
 
     await myPoolConnect;
-    let cols = "Title, FirstName + ' ' + MiddleName + ' ' + LastName as Name, EmailAddress, Phone";
+    //let cols = "Title, FirstName + ' ' + MiddleName + ' ' + LastName as Name, EmailAddress, Phone";
     const result = await myPool.request().query(`select top ${max} ${cols} from SalesLT.Customer`);
     return result;
 }

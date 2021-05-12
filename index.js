@@ -45,7 +45,8 @@ app.get("/help", (req, res) => res.render("usage", { title: "Usage" }));
 // async function not called with await...
 // Here, we read customers from the AdventureWorks database and pass them to the advworks .ejs view.
 //
-sqldata.getCustomers().then((customers) => {
+let cols = "Title, FirstName + ' ' + MiddleName + ' ' + LastName as Name, EmailAddress, Phone";
+sqldata.getCustomers(cols, 20).then((customers) => {
     app.get("/advworks", (req, res) =>
         res.render("advworks", { title: "Adventure Works", customers: customers.recordset })
     );
