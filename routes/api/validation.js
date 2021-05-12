@@ -55,10 +55,34 @@ const mssqlCustomerValidation = (data) => {
     return error;
 };
 
+
+///////////////////////////////////////////////////////////////////////////////////
+// courses.js validation
+//
+const coursesPutValidation = (data) => {
+    const schema = Joi.object({
+        id: Joi.number().required(),
+        name: Joi.string().min(3).required(),
+      });
+    const { error } = schema.validate(data);
+    return error;
+};
+const coursesPostValidation = (data) => {
+    const schema = Joi.object({
+        name: Joi.string().min(3).required(),
+      });
+    const { error } = schema.validate(data);
+    return error;
+};
+
+
+
 module.exports = {
     registerValidation,
     loginValidation,
     filePostValidation,
     fileDeleteValidation,
     mssqlCustomerValidation,
+    coursesPutValidation,
+    coursesPostValidation
 };
