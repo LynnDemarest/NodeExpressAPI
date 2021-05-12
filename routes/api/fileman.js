@@ -36,6 +36,7 @@ const root = process.env.filemanroot;
 //
 // Ex: http://localhost:3000/api/files?path=root
 //
+//
 router.get("/", async (req, res) => {
     let filename = req.query.path || "";
     if (filename == "root") filename = "";
