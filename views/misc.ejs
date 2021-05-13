@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("./partials/head.ejs") %>
+  <body>
+    <%- include("./partials/nav.ejs") %>
+    <div class="container">   
+      <h1>Miscellaneous Tricks and Tips</h1>
+      <h3>Use lorem.js and picsum.photos for Prototyping</h3>
+<p>Not for nothing, but did you know an <b>img</b> tag with a <b>src</b> of <b>https://picsum.photos/500/300</b> 
+    will generate a random image with the given width and height or 500 and 300? The image to the right uses this technique.</p>
+  <p>
+    Similarly, the <i>lorem ipsum</i> text below is generated with a <b>div</b> containing a <b>data-lorem="3p"</b> 
+    attribute, 3p meaning three paragraphs. There are <a href="https://github.com/f/loremjs#readme">
+    many other options</a>, of course.
+  </p>
+  <p>
+    For <b>data-lorem</b> to work you need to include this <b><pre>
+      &lt;script src="js/lorem.js"&gt;&lt;/script&gt;
+    </pre></b>
+  </p>
+  <p>You can get it at <a target="_blank" href="https://github.com/f/loremjs#readme">https://github.com/f/loremjs#readme</a></p>
+  <div data-lorem="3p">
+        <img src="https://picsum.photos/500/300" style="float:right;margin-right:20px;margin-left:20px;" />
+  </div>
+  <%- include("./partials/footer.ejs") %>
+</body>
+</html>

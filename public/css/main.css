@@ -4,6 +4,10 @@ body {
     margin: 0;
 }
 
+h2 {
+    text-decoration: underline;
+}
+
 .container {
     padding-left: 10px;
 }

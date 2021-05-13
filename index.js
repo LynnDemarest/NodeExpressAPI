@@ -42,6 +42,8 @@ app.get("/", (req, res) => res.render("index", { title: "Home" }));
 
 app.get("/help", (req, res) => res.render("usage", { title: "Usage" }));
 
+app.get("/misc", (req, res) => res.render("misc", { title: "Miscellaneous Tricks and Tips" }));
+
 // async function not called with await...
 // Here, we read customers from the AdventureWorks database and pass them to the advworks .ejs view.
 //
