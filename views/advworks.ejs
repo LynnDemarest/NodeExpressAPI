@@ -8,13 +8,15 @@
             <h3>Customers</h3>
             <table class="customer-table">
                 <tr>
-                    <th>Title</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
+                    <th >Title</th>
+                    <th >Name</th>
+                    <th >Email</th>
+                    <th >Phone</th>
                 </tr>
                 <% customers.forEach( (cust) => { %> <%- include("./partials/cust.ejs", { cust : cust }) %> <% }); %>
             </table>
+
+            <p>Thank you to <a target="_blank" href="https://www.sqlservercentral.com">sqlservercentral.com</a> for providing the little <a target="_blank" href="https://www.sqlservercentral.com/articles/connecting-to-adventureworks-on-azure">AdventureWorks</a> database hosted on Azure and used by this page.</p>
         </div>
         <%- include("./partials/footer.ejs") %>
     </body>

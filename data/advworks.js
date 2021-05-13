@@ -1,8 +1,14 @@
 const sql = require("mssql");
 
+//
+// Called from index.js to load the first page of customers in advworks.ejs
+//
+//
+//
 async function getCustomers(cols, maxToGet) {
     let max = maxToGet;
     const bDEBUG = true;
+    
     const iMaxCustomers = 100;
     const iMaxMax = 500;
 
