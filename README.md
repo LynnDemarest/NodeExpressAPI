@@ -1,4 +1,4 @@
-# Nodejs API using Express
+# Nodejs Web Pages and APIs using Express and EJS
 
 This little test project creates a node.js app that illustrates several node.js (v14.16.0) features.
 

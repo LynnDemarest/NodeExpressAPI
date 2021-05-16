@@ -4,6 +4,9 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const ejs = require("ejs");
+
+//const bootstrap = require('@bootstrap/js');  // for browsers! 
+
 //const mssql = require("./routes/api/mssql");
 const mssql = require("mssql");
 //const { DH_NOT_SUITABLE_GENERATOR } = require("constants");
@@ -41,6 +44,10 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/", (req, res) => res.render("index", { title: "Home" }));
 
 app.get("/help", (req, res) => res.render("usage", { title: "Usage" }));
+
+app.get("/courses", (req, res) => res.render("courses", { title: "Courses" }));
+app.get("/fileman", (req, res) => res.render("fileman", { title: "Files" }));
+
 
 app.get("/misc", (req, res) => res.render("misc", { title: "Miscellaneous Tricks and Tips" }));
 

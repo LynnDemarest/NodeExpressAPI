@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("./partials/head.ejs") %>
+  <body>
+    <%- include("./partials/nav.ejs") %>
+    <div class="container">   
+      <h1>Courses</h1>
+      <p>This simple courses API offers a simple CRUD interface, as follows:</p> 
+      <ul>
+          <li>Create Course </li>
+            POST /api/courses
+            <br/>Body has json { "name": "new course"}
+          <li>Read All </li>
+            GET /api/courses
+          <li>Read One Course </li>
+            GET /api/courses/1
+          <li>Update One Course</li>
+            PUT /api/courses
+            <br/>
+            {
+                "id": 6,
+                "name": "record 4"
+            }
+          <li>Delete Course</li>
+            DELETE /api/courses/1
+      </ul>
+      The data is stored in a simple in-memory array, and so is not persistent.
+    </div>
+    <%- include("./partials/footer.ejs") %>
+  </body>
+</html>
