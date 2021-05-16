@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const ejs = require("ejs");
 
-//const bootstrap = require('@bootstrap/js');  // for browsers! 
+//const bootstrap = require('@bootstrap/js');  // for browsers!
 
 //const mssql = require("./routes/api/mssql");
 const mssql = require("mssql");
@@ -48,19 +48,28 @@ app.get("/help", (req, res) => res.render("usage", { title: "Usage" }));
 app.get("/courses", (req, res) => res.render("courses", { title: "Courses" }));
 app.get("/fileman", (req, res) => res.render("fileman", { title: "Files" }));
 
+app.get("/misc", (req, res) =>
+  res.render("misc", { title: "Miscellaneous Tricks and Tips" })
+);
 
-app.get("/misc", (req, res) => res.render("misc", { title: "Miscellaneous Tricks and Tips" }));
+app.get("/games", (req, res) =>
+  res.render("games", { title: "Games" })
+);
 
 // async function not called with await...
 // Here, we read customers from the AdventureWorks database and pass them to the advworks .ejs view.
 //
 if (true) {
-let cols = "Title, FirstName + ' ' + MiddleName + ' ' + LastName as Name, EmailAddress, Phone";
-sqldata.getCustomers(cols, 20).then((customers) => {
+  let cols =
+    "Title, FirstName + ' ' + MiddleName + ' ' + LastName as Name, EmailAddress, Phone";
+  sqldata.getCustomers(cols, 20).then((customers) => {
     app.get("/advworks", (req, res) =>
-        res.render("advworks", { title: "Adventure Works", customers: customers.recordset })
+      res.render("advworks", {
+        title: "Adventure Works",
+        customers: customers.recordset,
+      })
     );
-});
+  });
 }
 //app.get("/advworks", (req, res) => res.render("advworks", { title: "Adventure Works", customers }));
 
@@ -82,12 +91,17 @@ app.use("/api/posts", require("./routes/api/posts.js"));
 
 // Connect to the mongodb database before starting to listen.
 // The database is used for authentication in auth.js
-mongoose.connect(process.env.MongoCS, { useNewUrlParser: true, useUnifiedTopology: true }).then(
+mongoose
+  .connect(process.env.MongoCS, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(
     (result) => {
-        const port = process.env.PORT || 3000;
-        app.listen(port, () => {
-            console.log(`Listening on port ${port}...`);
-        });
+      const port = process.env.PORT || 3000;
+      app.listen(port, () => {
+        console.log(`Listening on port ${port}...`);
+      });
     },
     (err) => console.log("ERROR: " + err)
-);
+  );

@@ -1,0 +1,38 @@
+<div style="display: flex">
+  <img
+    id="testimage"
+    src="/images/street.jpg"
+    style="width: 300px; border: 5px solid black"
+  />
+  <div
+    id="gameboard"
+    style="width: 300px; background-color: black; margin-left: 20px"
+  ></div>
+</div>
+
+<script src="/js/ImageProcessor.js"></script>
+<script src="/js/cSlidingPuzzleGame.js"></script>
+
+<script>
+  //document.getElementById("testimage").src = "https://i.picsum.photos/id/552/500/500.jpg?hmac=xhz_UnakbIYc1wvTaAxKJt7MvTl3ykIrcPX9PEfFwN8";
+  //document.getElementById("testimage").src = "/images/street.jpg";
+
+  options = {
+    src: "/images/street.jpg",
+    numColsToCut: 3,
+    numRowsToCut: 3,
+    heightOfOnePiece: 100,
+    widthOfOnePiece: 100,
+    gameboardid: "gameboard",
+  };
+  // options = {
+  //   src: "/images/tree.jpg",
+  //   numColsToCut: 5,
+  //   numRowsToCut: 5,
+  //   heightOfOnePiece: 100,
+  //   widthOfOnePiece: 100,
+  //   gameboardid: "gameboard",
+  // };
+
+  var game = new SlidingPuzzleGame(options);
+</script>

@@ -29,9 +29,8 @@ class ImageProcessor {
     DivideImage(image) {
         //debugger;
         let imagePieces = [];
-        for(var x = 0; x < this._p.numColsToCut; ++x) {
-            for(var y = 0; y < this._p.numRowsToCut; ++y) 
-            {
+        for(var y = 0; y < this._p.numRowsToCut; ++y)  {
+            for(var x = 0; x < this._p.numColsToCut; ++x) {
                 var canvas = document.createElement('canvas');
                 canvas.width = this._p.widthOfOnePiece;
                 canvas.height = this._p.heightOfOnePiece;
@@ -49,3 +48,4 @@ class ImageProcessor {
     }
 
 }
+
