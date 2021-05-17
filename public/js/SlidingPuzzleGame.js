@@ -17,7 +17,7 @@
       let img = new Image(options.heightOfOnePiece, options.widthOfOnePiece);
       img.src = pieces[i];
       img.id = i + "_image";
-      img.alt = img.id;
+      //img.alt = img.id;
       img.title = img.id;
       if (i == pieces.length-1) {
         img.style.visibility = "hidden";

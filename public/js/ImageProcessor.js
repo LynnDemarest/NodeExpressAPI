@@ -14,6 +14,7 @@ class ImageProcessor {
         let height = params.numRowsToCut * params.heightOfOnePiece;
 
         let image = new Image(width, height);
+        //image.crossOrigin = "anonymous";
         image.src = this._p.src;
 
         this.imagePieces = this.DivideImage(image);

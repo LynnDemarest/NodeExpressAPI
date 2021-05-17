@@ -5,11 +5,67 @@
     <%- include("./partials/nav.ejs") %>
     <div class="container">
       <h1>Games</h1>
-      <p>
-        Here's a sliding-tile game I created for fun. 
-      </p>
-      <%- include("./partials/SlidingPuzzlePartialView.ejs") %>
+      <p>Here's a sliding-tile game I created for fun.</p>
+
+      <script src="/js/ImageProcessor.js"></script>
+      <script src="/js/cSlidingPuzzleGame.js"></script>
+
+      <script>
+        var options = {
+          src: "/images/city.jpg",
+          numColsToCut: 4,
+          numRowsToCut: 4,
+          heightOfOnePiece: 125,
+          widthOfOnePiece: 125,
+          gameboardid: "gameboard1",
+        };
+        // window.onload = (e) => {
+        //   try {
+        //     var game = new SlidingPuzzleGame(options);
+        //   } catch (err) {
+        //     console.log(err);
+        //   }
+        // };
+      </script>
+      <div style="margin:20px;">
+      <%- include("./partials/SlidingPuzzlePartialView.ejs", { imagePath :
+      "/images/city.jpg", gameboardid: "gameboard1", boardwidth: 500 } ) %>
+      </div>
+      <script>
+        var options1 = {
+          src: "/images/street.jpg",
+          numColsToCut: 3,
+          numRowsToCut: 3,
+          heightOfOnePiece: 100,
+          widthOfOnePiece: 100,
+          gameboardid: "gameboard2",
+        };
+        var options2 = {
+          src: "/images/tree.jpg",
+          numColsToCut: 5,
+          numRowsToCut: 5,
+          heightOfOnePiece: 100,
+          widthOfOnePiece: 100,
+          gameboardid: "gameboard3",
+        };
+
+        window.onload = (e) => {
+          try {
+            var game2 = new SlidingPuzzleGame(options2);
+            var game = new SlidingPuzzleGame(options);
+            var game1 = new SlidingPuzzleGame(options1);
+          } catch (err) {
+            console.log(err);
+          }
+        };
+      </script>
+      <div style="margin:20px;">
+      <%- include("./partials/SlidingPuzzlePartialView.ejs", { imagePath : "/images/street.jpg", gameboardid: "gameboard2", boardwidth: 300 } ) %>
     </div>
+    <div style="margin:20px;">
+        <%- include("./partials/SlidingPuzzlePartialView.ejs", { imagePath : "/images/tree.jpg", gameboardid: "gameboard3", boardwidth: 500 } ) %>
+      </div>
+      </div>
     <%- include("./partials/footer.ejs") %>
   </body>
 </html>

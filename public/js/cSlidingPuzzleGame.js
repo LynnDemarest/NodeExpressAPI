@@ -5,13 +5,14 @@ class SlidingPuzzleGame {
   options = [];
 
   constructor(ipoptions) {
+    debugger;
     this.options = ipoptions;
     this.ip = new ImageProcessor(ipoptions);
 
     //this.pieces = this.shuffle(this.ip.pieces);
     this.pieces = this.ip.pieces;
     //debugger;
-    var obj = document.getElementById(ipoptions.gameboardid);
+    var board = document.getElementById(ipoptions.gameboardid);
     for (var i = 0; i < this.pieces.length; i++) {
       let img = new Image(
         ipoptions.heightOfOnePiece,
@@ -19,7 +20,7 @@ class SlidingPuzzleGame {
       );
 
       img.src = this.pieces[i];
-      img.id = i + "_image";
+      img.id = this.makeImageId(i); // + "_image_" + this.options.gameboardid;
       img.alt = img.id;
       img.title = i.toString();
       if (i == this.pieces.length - 1) {
@@ -30,7 +31,7 @@ class SlidingPuzzleGame {
         console.log(e.target.id);
         this.moveToHiddenSquare(img);
       };
-      obj.appendChild(img);
+      board.appendChild(img);
     }
 
     this.shuffle(this.pieces.length*20,0);
@@ -39,6 +40,11 @@ class SlidingPuzzleGame {
   //
   // private
   //
+  makeImageId(idx) {
+    return idx + "_image_" + this.options.gameboardid;
+  }
+
+
   moveToHiddenSquare(img) {
     if (this.squaresAreAdjacent(img.id, this.currentHiddenImage.id))
       this.swapByImage(img, this.currentHiddenImage);
@@ -168,7 +174,7 @@ class SlidingPuzzleGame {
     //
     var i = Math.floor(Math.random() * adjSquares.length);
     var imgTo = this.currentHiddenImage;
-    var imgFrom = document.getElementById(adjSquares[i] + "_image");
+    var imgFrom = document.getElementById(this.makeImageId(adjSquares[i]));
     this.swapByImage(imgFrom, imgTo);
   }
 
