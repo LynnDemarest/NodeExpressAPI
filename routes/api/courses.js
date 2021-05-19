@@ -5,6 +5,7 @@ const {
   getReasonPhrase,
   getStatusCode,
 } = require("http-status-codes");
+
 const express = require("express");
 const router = express.Router();
 const { coursesPutValidation, coursesPostValidation } = require("./validation.js");

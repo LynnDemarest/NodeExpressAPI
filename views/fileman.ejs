@@ -7,8 +7,12 @@
       <h1>File Manager API</h1>
       <p>This API allows you to manage files in a folder located on the server.</p> 
       <p>You must be registered and logged in for this to work, of course.</p>
-      <p>See <a target="_blank" href="help">Help</a> for more.</p>
-
+      <p>The endpoints are :</p>
+      <ul>
+        <li>api/files?path=[path to folder or file]</li>
+        Returns an object with either the file data or the folder object, which contains a list of folder objects and a list of file objects. 
+        <li></li>
+      </ul>
     </div>
     <%- include("./partials/footer.ejs") %>
   </body>

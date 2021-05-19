@@ -5,6 +5,8 @@ const dotenv = require("dotenv");
 
 const express = require("express");
 
+const filedata = require("./fileman_data");
+
 // Use this for the async/await and promises versions of 'get'
 const fs = require("fs").promises;
 // Use this for the standard callback version of 'get' if you uncomment that code.
@@ -42,6 +44,9 @@ router.get("/", async (req, res) => {
     if (filename == "root") filename = "";
 
     let fullpath = Path.join(root, filename);
+
+    //var fileOrFolder = filedata.GetFileOrFolder(fullpath);
+
     let stats;
     try {
         stats = await fs.stat(fullpath);
