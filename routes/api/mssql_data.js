@@ -1,14 +1,12 @@
 const sql = require("mssql");
-const Joi = require("@hapi/joi"); // use Pascal for classes. Joi is for validation.
+//const Joi = require("@hapi/joi"); // use Pascal for classes. Joi is for validation.
 const { ReasonPhrases, StatusCodes, getReasonPhrase, getStatusCode } = require("http-status-codes");
 const { helpers } = require("./helpers");
-const express = require("express");
-const Path = require("path");
-const router = express.Router();
+//const express = require("express");
+//const Path = require("path");
+//const router = express.Router();
 const dotdev = require("dotenv");
-const { mssqlCustomerValidation } = require("./validation.js");
-
-const { addCustomer, deleteCustomer, getCustomers, getCustomer } = require("./mssql_data.js");
+//const { mssqlCustomerValidation } = require("./validation.js");
 
 // mssql.js
 // https://www.npmjs.com/package/mssql
@@ -75,72 +73,46 @@ myPool.on("error", (err) => console.log(err));
 // customer
 // Gets all customers using the singelton connection pool 'myPool'.
 //
-router.get("/customer", async (req, res) => {
+const getCustomers = async function() {
     try {
-        var customers = await getCustomers();
-        let resp = helpers.MakeResponse(true, `${result.recordset.length} customers read.`, customers);
+        await myPoolConnect;
 
         // limit number of records returned.
         // default is iMaxCustomers. Maximum is iMaxMax.
-        // let max = req.query.max;
-        // if (max === undefined || isNaN(max)) {
-        //     max = iMaxCustomers;
-        // } else {
-        //     if (max > iMaxMax) max = iMaxMax;
-        // }
-        // let cols = "Title, FirstName + ' ' + MiddleName + ' ' + LastName as Name, EmailAddress, Phone";
-        // const result = await myPool.request().query(`select top ${max} ${cols} from SalesLT.Customer`);
-        // // Note:
-        // // recordsets[] has an array of recordsets, in case the query returned more than one.
-        // // recordset is just the first one.
-        // // rowsAffected is an array of the number of rows returned in each recordset.
-        // //
-        // let resp = helpers.MakeResponse(true, `${result.recordset.length} customers read.`, result.recordset);
-        res.send(resp);
+        let max = req.query.max;
+        if (max === undefined || isNaN(max)) {
+            max = iMaxCustomers;
+        } else {
+            if (max > iMaxMax) max = iMaxMax;
+        }
+        let cols = "Title, FirstName + ' ' + MiddleName + ' ' + LastName as Name, EmailAddress, Phone";
+        const result = await myPool.request().query(`select top ${max} ${cols} from SalesLT.Customer`);
+        return result.recordset;
+        // Note:
+        // recordsets[] has an array of recordsets, in case the query returned more than one.
+        // recordset is just the first one.
+        // rowsAffected is an array of the number of rows returned in each recordset.
+        //
+        //let resp = helpers.MakeResponse(true, `${result.recordset.length} customers read.`, result.recordset);
+        //res.send(resp);
+        //return resp;
     } catch (err) {
         // ... error checks
-        console.log(err);
-        res.status(StatusCodes.BAD_REQUEST).send(`Could not get customers: ${err}`);
+        //console.log(err);
+        //res.status(StatusCodes.BAD_REQUEST).send(`Could not get customers: ${err}`);
+        throw err;
     }
-});
-
-// router.get("/customer", async (req, res) => {
-//     try {
-//         await myPoolConnect;
-
-//         // limit number of records returned.
-//         // default is iMaxCustomers. Maximum is iMaxMax.
-//         let max = req.query.max;
-//         if (max === undefined || isNaN(max)) {
-//             max = iMaxCustomers;
-//         } else {
-//             if (max > iMaxMax) max = iMaxMax;
-//         }
-//         let cols = "Title, FirstName + ' ' + MiddleName + ' ' + LastName as Name, EmailAddress, Phone";
-//         const result = await myPool.request().query(`select top ${max} ${cols} from SalesLT.Customer`);
-//         // Note:
-//         // recordsets[] has an array of recordsets, in case the query returned more than one.
-//         // recordset is just the first one.
-//         // rowsAffected is an array of the number of rows returned in each recordset.
-//         //
-//         let resp = helpers.MakeResponse(true, `${result.recordset.length} customers read.`, result.recordset);
-//         res.send(resp);
-//     } catch (err) {
-//         // ... error checks
-//         console.log(err);
-//         res.status(StatusCodes.BAD_REQUEST).send(`Could not get customers: ${err}`);
-//     }
-// });
+};
 
 // Get ONE Customer
 // Gets one player using query parameters and global pool.
 //
-router.get("/customer/:id", async (req, res) => {
+const getCustomer = async function (id) {
     try {
         await myPoolConnect;
         let resp;
         let cols = "Title, FirstName + MiddleName + LastName as Name, EmailAddress, Phone";
-        var ID = parseInt(req.params.id);
+        var ID = parseInt(id);
         if (!isNaN(ID)) {
             const result = await myPool
                 .request()
@@ -159,25 +131,27 @@ router.get("/customer/:id", async (req, res) => {
                 resp = helpers.MakeResponse(false, `Customer ${ID} not found.`, result.recordset);
             }
         } else {
-            resp = helpers.MakeResponse(false, `Customer ID (${req.params.id}) must be a number.`);
+            resp = helpers.MakeResponse(false, `Customer ID (${id}) must be a number.`);
         }
 
-        res.send(resp);
+        // res.send(resp);
+        return resp;
     } catch (err) {
         // ... error checks
-        console.log(err);
-        res.status(StatusCodes.BAD_REQUEST).send(`Could not get customer ${req.params.id}: ${err}`);
+        ///console.log(err);
+        //res.status(StatusCodes.BAD_REQUEST).send(`Could not get customer ${req.params.id}: ${err}`);
+        throw err;
     }
-});
+};
 
 // Save Customer
 // insert or update using global connection pool
 //
 //
 //
-router.post("/customer", async (req, res) => {
+const addCustomer = async function (newcust) {
     try {
-        const error = mssqlCustomerValidation(req.body);
+        const error = mssqlCustomerValidation(newcust);
         if (error) {
             return res.status(StatusCodes.BAD_REQUEST).send(error.details[0].message);
         } else {
@@ -185,38 +159,40 @@ router.post("/customer", async (req, res) => {
             //
             //
             await myPoolConnect;
-            let id = req.body.customerid;
+            let id = newcust.customerid;
             if (id == undefined) id = 0;
 
             const result = await myPool
                 .request()
                 .input("CustomerID", sql.Int, id)
-                .input("FirstName", sql.NVarChar(50), req.body.firstname)
-                .input("LastName", sql.NVarChar(50), req.body.lastname)
+                .input("FirstName", sql.NVarChar(50), newcust.firstname)
+                .input("LastName", sql.NVarChar(50), newcust.lastname)
                 .execute("upsertCustomer");
 
             console.dir(result);
 
             let resp = helpers.MakeResponse(true, `Customer written.`, result.recordset);
-            res.send(resp);
+            //res.send(resp);
+            return resp;
         }
     } catch (err) {
-        console.log(err);
-        res.status(StatusCodes.BAD_REQUEST).send(`Could not save customer : ${err}`);
+        ///console.log(err);
+        ///res.status(StatusCodes.BAD_REQUEST).send(`Could not save customer : ${err}`);
+        throw err;
     }
-});
+};
 
 // DELETE a customer
 // Delete a single customer using parameterized query and global connection pool.
 //
 //
-router.delete("/customer/:id", async (req, res) => {
+const deleteCustomer = async function (id) {
     try {
         await myPoolConnect;
         let resp;
-        var ID = parseInt(req.params.id); // Note: parseInt will accept the first number it finds before hitting a non-digit
+        var ID = parseInt(id); // Note: parseInt will accept the first number it finds before hitting a non-digit
         if (isNaN(ID)) {
-            resp = helpers.MakeResponse(false, `Customer ID (${req.params.id}) must be an integer.`, "");
+            resp = helpers.MakeResponse(false, `Customer ID (${id}) must be an integer.`, "");
         } else {
             //
             // make sure that any items are correctly URL encoded in the connection string
@@ -231,11 +207,13 @@ router.delete("/customer/:id", async (req, res) => {
 
             resp = helpers.MakeResponse(true, `Customer ${ID} deleted.`, "");
         }
-        res.send(resp);
+        //res.send(resp);
+        return resp;
     } catch (err) {
         //console.log(err);
-        res.status(StatusCodes.BAD_REQUEST).send(`Could not delete customer ${ID}: ${err}`);
+        //res.status(StatusCodes.BAD_REQUEST).send(`Could not delete customer ${ID}: ${err}`);
+        throw err;
     }
-});
+};
 
-module.exports = router;
+module.exports = { addCustomer, deleteCustomer, getCustomers, getCustomer };

@@ -4,12 +4,7 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const ejs = require("ejs");
-
-//const bootstrap = require('@bootstrap/js');  // for browsers!
-
-//const mssql = require("./routes/api/mssql");
 const mssql = require("mssql");
-//const { DH_NOT_SUITABLE_GENERATOR } = require("constants");
 
 const sqldata = require("./data/advworks");
 
@@ -52,25 +47,26 @@ app.get("/misc", (req, res) =>
   res.render("misc", { title: "Miscellaneous Tricks and Tips" })
 );
 
-app.get("/games", (req, res) =>
-  res.render("games", { title: "Games" })
-);
+app.get("/games", (req, res) => res.render("games", { title: "Games" }));
 
 // async function not called with await...
 // Here, we read customers from the AdventureWorks database and pass them to the advworks .ejs view.
 //
-if (true) {
-  let cols =
-    "Title, FirstName + ' ' + MiddleName + ' ' + LastName as Name, EmailAddress, Phone";
-  sqldata.getCustomers(cols, 20).then((customers) => {
-    app.get("/advworks", (req, res) =>
-      res.render("advworks", {
-        title: "Adventure Works",
-        customers: customers.recordset,
-      })
-    );
-  });
-}
+//if (false) {
+  try {
+    let cols =
+      "Title, FirstName + ' ' + MiddleName + ' ' + LastName as Name, EmailAddress, Phone";
+    sqldata.getCustomers(cols, 20).then((customers) => {
+        app.get("/advworks", (req, res) =>
+          res.render("advworks", { title: "Adventure Works", customers: customers.recordset})
+        )
+    }).catch((err) => {
+          console.log(err);
+    });
+  } catch (err) {
+    console.log("sqldata.getCustomers failed: " + err);
+  };
+//}
 //app.get("/advworks", (req, res) => res.render("advworks", { title: "Adventure Works", customers }));
 
 // Inject the courses middleware into the pipeline.
@@ -83,7 +79,13 @@ app.use("/api/courses", require("./routes/api/courses.js"));
 
 app.use("/api/files", require("./routes/api/fileman.js"));
 
-if (true) app.use("/api/mssql", require("./routes/api/mssql.js"));
+//if (false) {
+  try {
+    app.use("/api/mssql", require("./routes/api/mssql.js"));
+  } catch (err) {
+    console.log(err);
+  }
+//}
 
 // This is a dummy controller used to demonstrate the use of verifyToken.js
 //
@@ -91,17 +93,31 @@ app.use("/api/posts", require("./routes/api/posts.js"));
 
 // Connect to the mongodb database before starting to listen.
 // The database is used for authentication in auth.js
-mongoose
-  .connect(process.env.MongoCS, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(
-    (result) => {
-      const port = process.env.PORT || 3000;
-      app.listen(port, () => {
-        console.log(`Listening on port ${port}...`);
-      });
-    },
-    (err) => console.log("ERROR: " + err)
-  );
+try {
+  mongoose
+    .connect(process.env.MongoCS, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
+//     .then(
+//       (result) => {
+//         const port = process.env.PORT || 3000;
+//         app.listen(port, () => {
+//           console.log(`Listening on port ${port}...`);
+//         });
+//       },
+//       (err) => {
+//         console.log("ERROR1: " + err);
+//       }
+//     )
+//     .catch((reason) => {
+//       console.log(reason);
+//     });
+ } catch (err) {
+   console.log("ERROR2: " + err);
+ }
+
+const port = process.env.PORT || 3000;
+        app.listen(port, () => {
+          console.log(`Listening on port ${port}...`);
+        });

@@ -27,4 +27,5 @@ class folderNode {
     files = [];        // array of file names in the folder 
 }
 
-module.exports = [helpers, folderNode];
+//module.exports = [helpers, folderNode];
+module.exports = { helpers, folderNode };
